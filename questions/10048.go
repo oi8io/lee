@@ -57,7 +57,7 @@ func rotate(matrix [][]int) {
 		return x, y
 	}
 
-	// x 表示由外向内第几个圈
+	// solveNQueensAnswers 表示由外向内第几个圈
 	for i := 0; i < n/2; i++ {
 		for j := i; j < n-1-i; j++ { // j的范围就是从i到n-1-i
 			x, y := i, j
@@ -68,7 +68,7 @@ func rotate(matrix [][]int) {
 				next = matrix[nx][ny]
 				matrix[nx][ny] = tmp
 				tmp = next
-				//fmt.Printf("(%d,%d)->(%d,%d),[%d]->[%d] \n", x, y, nx, ny, matrix[nx][ny], tmp)
+				//fmt.Printf("(%d,%d)->(%d,%d),[%d]->[%d] \n", solveNQueensAnswers, y, nx, ny, matrix[nx][ny], tmp)
 				x, y = nx, ny
 			}
 			//fmt.Println("----------------")
@@ -104,7 +104,7 @@ func rotate(matrix [][]int) {
 23->33
 33->32
 32->22
-x = n-y
+solveNQueensAnswers = n-y
 
 
 11->22  23 04

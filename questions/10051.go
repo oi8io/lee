@@ -67,17 +67,17 @@ import (
 
 
 */
-var m = make(map[int]int)
-var x []map[int]int
+var solveNQueensMap = make(map[int]int)
+var solveNQueensAnswers []map[int]int
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func solveNQueens(n int) [][]string {
 	Queens(1, n)
-	for _, m2 := range x {
+	for _, m2 := range solveNQueensAnswers {
 		for _, y := range m2 {
 			for i := 1; i <= n; i++ {
 				if i == y {
-					fmt.Print(" x ")
+					fmt.Print(" solveNQueensAnswers ")
 				} else {
 					fmt.Print(" . ")
 				}
@@ -92,19 +92,19 @@ func solveNQueens(n int) [][]string {
 // 摆放第k行的皇后
 func Queens(k int, n int) {
 	if k > n {
-		if len(m) == n {
-			x = append(x, m)
-			m = make(map[int]int)
+		if len(solveNQueensMap) == n {
+			solveNQueensAnswers = append(solveNQueensAnswers, solveNQueensMap)
+			solveNQueensMap = make(map[int]int)
 		}
 		return
 	}
 	for i := 1; i <= n; i++ {
 		j := 1
 		for {
-			if m[j] == i { // 同一列
+			if solveNQueensMap[j] == i { // 同一列
 				break
 			}
-			if abs(m[j], i) == abs(k, j) { //对角线
+			if abs(solveNQueensMap[j], i) == abs(k, j) { //对角线
 				break
 			}
 			if j == k {
@@ -113,7 +113,7 @@ func Queens(k int, n int) {
 			j++
 		}
 		if j == k {
-			m[k] = i
+			solveNQueensMap[k] = i
 			Queens(k+1, n)
 		}
 	}
