@@ -24,14 +24,16 @@ func ShellSort(nums []int) []int {
 	return nil
 }
 
+// BubbleSort 冒泡排序
 func BubbleSort(nums []int) []int {
-	var out []int
 	for i := 0; i < len(nums)-1; i++ {
-		for j := 0; j < i; j++ {
-
+		for j := 1; j < len(nums)-i; j++ {
+			if nums[j-1] > nums[j] {
+				nums[j], nums[j-1] = nums[j-1], nums[j]
+			}
 		}
 	}
-	return out
+	return nums
 }
 func HeapSort(nums []int) []int {
 	var out []int
@@ -41,6 +43,21 @@ func HeapSort(nums []int) []int {
 		}
 	}
 	return out
+}
+
+func SelectSort(nums []int) []int {
+	for i := 0; i < len(nums); i++ {
+		min := nums[i]
+		idx := i
+		for j := i + 1; j < len(nums); j++ {
+			if min > nums[j] {
+				min = nums[j]
+				idx = j
+			}
+		}
+		nums[i], nums[idx] = nums[idx], nums[i]
+	}
+	return nums
 }
 
 func BucketSort(nums []int) []int {
