@@ -44,46 +44,12 @@
  *
  *
  */
-package problems
 
-// import "fmt"
+package problems
 
 // @lc code=start
 func longestCommonPrefix(strs []string) string {
-	if len(strs) == 1 {
-		return strs[0]
-	}
-	// 1. 先找到最短字符串长度 O(n)
-	var si, n = 0, len(strs[0])
-	for i, v := range strs {
-		if len(v) < n {
-			n = len(v)
-			si = i
-		}
-	}
-	s := strs[si]
-	min, max := 0, n
-	for {
-		unMatch := false
-		for _, v := range strs {
-			if s[:n] != v[:n] {
-				unMatch = true
-				break
-			}
-		}
-		if unMatch {
-			max = n
-		} else {
-			min = n
-			if max-1 <= min {
-				break
-			}
-		}
-		n = (max + min) / 2
-	}
-
-	// 2. 采用二分查找
-	return s[:min]
+	return ""
 }
 
 // @lc code=end
