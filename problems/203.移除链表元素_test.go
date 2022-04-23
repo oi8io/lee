@@ -16,6 +16,11 @@ func Test_removeElements(t *testing.T) {
 		want *ListNode
 	}{
 		// TODO: Add test cases.
+		{"", args{BuildListNode([]int{2}), 2}, BuildListNode([]int{})},
+		{"", args{BuildListNode([]int{1, 2, 6, 3, 4, 5, 6}), 6}, BuildListNode([]int{1, 2, 3, 4, 5})},
+		{"", args{BuildListNode([]int{6, 6, 1, 2, 6, 3, 4, 5, 6}), 6}, BuildListNode([]int{1, 2, 3, 4, 5})},
+		{"", args{BuildListNode([]int{1, 2, 2, 1}), 2}, BuildListNode([]int{1, 1})},
+		{"", args{BuildListNode([]int{5, 5, 5, 5, 5, 5, 5}), 5}, BuildListNode([]int{})},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
