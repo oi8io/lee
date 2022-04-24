@@ -1,8 +1,6 @@
 package problems
 
-import (
-	"fmt"
-)
+import "fmt"
 
 type ListNode struct {
 	Val  int
@@ -20,15 +18,31 @@ func BuildListNode(in []int) *ListNode {
 	return list
 }
 
-func (list *ListNode) String() string {
+func (head *ListNode) String() string {
 	var ret string
-	head := list
-	for {
-		if head == nil {
+	var x *ListNode
+	for slow, fast := head, head; fast != nil && fast.Next != nil; {
+		slow, fast = slow.Next, fast.Next.Next
+		if slow == fast {
+			x = slow
 			break
 		}
-		ret += fmt.Sprintf(" %d ", head.Val)
-		head = head.Next
+	}
+	list := head
+	var hasVisited bool
+	for {
+		if list == nil {
+			break
+		}
+		if list == x {
+			if hasVisited == false {
+				hasVisited = true
+			} else {
+				break
+			}
+		}
+		ret += fmt.Sprintf(" %d ", list.Val)
+		list = list.Next
 	}
 	return ret
 }
