@@ -46,7 +46,11 @@
 
 package problems
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+	"time"
+)
 
 func Test_checkPerfectNumber(t *testing.T) {
 	type args struct {
@@ -71,7 +75,10 @@ func Test_checkPerfectNumber(t *testing.T) {
 		{"", args{2016}, false},
 		{"", args{2016}, false},
 		{"", args{2016}, false},
-		{"", args{2022}, false},
+		{"", args{8128}, true},
+		{"", args{496}, true},
+		{"", args{28}, true},
+		{"", args{6}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -80,4 +87,22 @@ func Test_checkPerfectNumber(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestCheckPerfectNumber(t *testing.T) {
+	var nums []int
+	before := time.Now()
+	for i := 0; i <= 10000000; i++ {
+		got := checkPerfectNumber(i)
+		if got {
+			nums = append(nums, i)
+		}
+		if i > 0 && i%10000 == 0 {
+			now := time.Now()
+			after := time.Now().Sub(before)
+			fmt.Println(i, after.Milliseconds())
+			before = now
+		}
+	}
+	fmt.Println(nums)
 }

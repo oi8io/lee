@@ -13,6 +13,9 @@ func Test_rotateString(t *testing.T) {
 		want bool
 	}{
 		// TODO: Add test cases.
+		{"", args{"abcde", "cdeab"}, true},
+		{"", args{"abab", "baba"}, true},
+		{"", args{"aaaaab", "baaaaa"}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

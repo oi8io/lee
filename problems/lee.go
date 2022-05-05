@@ -1,8 +1,7 @@
-package Lee
+package problems
 
 import (
 	"fmt"
-	"strconv"
 )
 
 /**
@@ -174,10 +173,6 @@ func TwoSum(nums []int, target int) []int {
  *     Next *ListNode
  * }
  */
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
 
 func NewListNode(nums []int) (ret *ListNode) {
 	var tmp *ListNode
@@ -256,26 +251,6 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 /**
 
  */
-func convertToBase7(num int) string {
-	var s string
-	flag := false
-	if num < 0 {
-		flag = true
-		num = 0 - num
-	}
-	for {
-		x := num % 7
-		s = strconv.Itoa(x) + s
-		num = num / 7
-		if num == 0 {
-			break
-		}
-	}
-	if flag {
-		s = "-" + s
-	}
-	return s
-}
 
 /**
 给定一个 每个结点的值互不相同 的二叉树，和一个目标值 k，找出树中与目标值 k 最近的叶结点。
@@ -349,7 +324,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func BuildTree(arr []*int) *TreeNode {
+func BuildTree1(arr []*int) *TreeNode {
 	var root *TreeNode
 	for _, i2 := range arr {
 		if i2 != nil {
@@ -370,7 +345,7 @@ func findClosestLeaf(root *TreeNode, k int) int {
 func findMinStep(board string, hand string) int {
 	var hands = make(map[int32]int)
 	for _, i2 := range hand {
-		hands[i2] ++
+		hands[i2]++
 	}
 	return 0
 }
@@ -422,59 +397,6 @@ func reverseList(head *ListNode) *ListNode {
 	return h
 }
 
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
-func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
-	var head = new(ListNode)
-	var root = head
-	for l1 != nil || l2 != nil {
-		for l2 != nil {
-			if l1 != nil {
-				if l2.Val > l1.Val {
-					break
-				}
-			}
-			head.Next = &ListNode{Val: l2.Val}
-			head = head.Next
-			l2 = l2.Next
-		}
-		if l1 != nil {
-			head.Next = &ListNode{Val: l1.Val}
-			head = head.Next
-			l1 = l1.Next
-		}
-	}
-	return root.Next
-}
-
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
-func mergeTwoLists2(l1 *ListNode, l2 *ListNode) *ListNode {
-	if l1 == nil {
-		return l2
-	}
-	if l2 == nil {
-		return l1
-	}
-	if l1.Val > l2.Val {
-		l1.Next = mergeTwoLists2(l1.Next, l2)
-		return l1
-	} else {
-		l2.Next = mergeTwoLists2(l1, l2.Next)
-		return l2
-	}
-}
-
 const full = 50
 
 /**
@@ -521,34 +443,12 @@ func FiveKM(dist int) (int, int) {
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/longest-substring-without-repeating-characters
 */
-func lengthOfLongestSubstring(s string) int {
-	longest := make(map[int]int)
-	longest[0] = 1
-	var sub string
-	for i := 0; i < len(s); i++ {
-		if i == 0 {
-			sub = string(s[i])
-			longest[i] = 1
-		} else {
-			sub = existsChar(sub, s[i])
-			longest[i] = Max(longest[i-1], len(sub))
-		}
-	}
-	return longest[len(s)-1]
-}
-func Max(a, b int) int {
+
+func Max1(a, b int) int {
 	if a > b {
 		return a
 	}
 	return b
-}
-func existsChar(s string, c uint8) string {
-	for j := 0; j < len(s); j++ {
-		if s[j] == c {
-			return s[j+1:] + string(c)
-		}
-	}
-	return s + string(c)
 }
 
 /**
@@ -569,7 +469,7 @@ func existsChar(s string, c uint8) string {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-func longestPalindrome(s string) string {
+func longestPalindrome1(s string) string {
 	var drome = make(map[int]string)
 	var sub string
 	for i := 0; i < len(s); i++ {
@@ -709,7 +609,6 @@ func FactRec(m, n int) int {
 	p := m - 1
 	return FactRec(p, p*n)
 }
-
 
 func Queen() {
 

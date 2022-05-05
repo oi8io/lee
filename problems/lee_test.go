@@ -1,4 +1,4 @@
-package Lee
+package problems
 
 import (
 	"fmt"
@@ -247,9 +247,8 @@ func TestGold2(t *testing.T) {
 	inputs := []struct {
 		s    string
 		want string
-	}{{"aba", "aba"},
-		//{"abcabcbb", "bcb"}, {"babad", "bab"}, {"cbbd", "bb"}, {"cbb", "bb"}
-	}
+	}{{"aba", "aba"}}//{"abcabcbb", "bcb"}, {"babad", "bab"}, {"cbbd", "bb"}, {"cbb", "bb"}
+
 	for _, i2 := range inputs {
 		if x := lastPalindrome(i2.s); x != i2.want {
 			t.Errorf("%s want %s but %s ", i2.s, i2.want, x)
@@ -261,9 +260,8 @@ func TestGetFirstChar(t *testing.T) {
 	inputs := []struct {
 		s    string
 		want uint8
-	}{{"leetcode", 'l'}, {"cc", 'c'},
-		//{"abcabcbb", "bcb"}, {"babad", "bab"}, {"cbbd", "bb"}, {"cbb", "bb"}
-	}
+	}{{"leetcode", 'l'}, {"cc", 'c'}}//{"abcabcbb", "bcb"}, {"babad", "bab"}, {"cbbd", "bb"}, {"cbb", "bb"}
+
 	for _, i2 := range inputs {
 		if x := GetFirstChar(i2.s); x != i2.want {
 			t.Errorf("%s want %d but %d ", i2.s, i2.want, x)
@@ -272,7 +270,7 @@ func TestGetFirstChar(t *testing.T) {
 }
 
 func TestHanoi(t *testing.T) {
-	sum:= Hanoi(5, "A", "B","C")
+	sum := Hanoi(5, "A", "B", "C")
 	fmt.Println(sum)
 
 	x := FactTail(5)

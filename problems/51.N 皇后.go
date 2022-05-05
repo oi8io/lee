@@ -67,26 +67,34 @@ import (
 
 
 */
+
+// @lc code=start
+
 var solveNQueensMap = make(map[int]int)
 var solveNQueensAnswers []map[int]int
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func solveNQueens(n int) [][]string {
 	Queens(1, n)
+	var ret [][]string
 	for _, m2 := range solveNQueensAnswers {
+		var fangan []string
 		for _, y := range m2 {
+			var str string
 			for i := 1; i <= n; i++ {
 				if i == y {
-					fmt.Print(" solveNQueensAnswers ")
+					str += "Q"
 				} else {
-					fmt.Print(" . ")
+					str += "."
 				}
 			}
-			fmt.Println()
+			fmt.Println(str)
+			fangan = append(fangan, str)
 		}
 		fmt.Println()
+		ret = append(ret, fangan)
 	}
-	return nil
+	return ret
 }
 
 // 摆放第k行的皇后
@@ -117,7 +125,6 @@ func Queens(k int, n int) {
 			Queens(k+1, n)
 		}
 	}
-
 }
 
 func abs(a, b int) int {
@@ -159,3 +166,5 @@ func Lookup(tree *Tree) {
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
+
+// @lc code=end

@@ -15,7 +15,8 @@ func Test_solveNQueens(t *testing.T) {
 		want [][]string
 	}{
 		// TODO: Add test cases.
-		{"", args{4}, [][]string{{"aaa"}, {"aaaa"}}},
+
+		{"", args{4}, [][]string{{".Q..", "...Q", "Q...", "..Q."}, {"..Q.", "Q...", "...Q", ".Q.."}}},
 		{"8", args{8}, [][]string{{"aaa"}, {"aaaa"}}},
 		{"12", args{12}, [][]string{{"aaa"}, {"aaaa"}}},
 	}
