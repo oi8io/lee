@@ -1,7 +1,5 @@
 package problems
 
-import "fmt"
-
 //给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
 //
 // k 是一个正整数，它的值小于或等于链表的长度。
@@ -60,11 +58,6 @@ import "fmt"
 
 //leetcode submit region begin(Prohibit modification and deletion)
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
 func buildList(in []int) *ListNode {
 	var list *ListNode
 	for i := len(in) - 1; i >= 0; i-- {
@@ -83,14 +76,6 @@ func buildList(in []int) *ListNode {
 		}
 	}
 	return list
-}
-
-func (l *ListNode) String() string {
-	var ret = fmt.Sprintf("%d ", l.Val)
-	if l.Next != nil {
-		ret += l.Next.String()
-	}
-	return ret
 }
 
 /**

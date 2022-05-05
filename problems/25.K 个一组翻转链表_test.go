@@ -29,30 +29,6 @@ func Test_reverseKGroup(t *testing.T) {
 	}
 }
 
-func TestListNode_String(t *testing.T) {
-	type fields struct {
-		Next *ListNode
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   string
-	}{
-		// TODO: Add test cases.
-		{"", fields{buildList([]int{1, 2, 3, 4, 5})}, ""},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			l := &ListNode{
-				Next: tt.fields.Next,
-			}
-			if got := l.String(); got != tt.want {
-				t.Errorf("String() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_buildList(t *testing.T) {
 	type args struct {
 		in []int
