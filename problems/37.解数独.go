@@ -209,8 +209,11 @@ func backTrack(board [][]byte, points, lines, col, block []int, try, needFill in
 		copy(ncol, col)
 		copy(nblock, block)
 		copy(nneedFillMap, points)
-		copy(bd, board)
 		nneedFill = needFill
+		for i, _ := range board {
+			bd[i] = make([]byte, len(board[i]))
+			copy(bd[i], board[i])
+		}
 		ntry = try
 		return
 	}

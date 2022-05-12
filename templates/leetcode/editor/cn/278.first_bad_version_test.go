@@ -2,7 +2,7 @@ package problems
 
 import "testing"
 
-func Test_totalNQueens(t *testing.T) {
+func Test_firstBadVersion(t *testing.T) {
 	type args struct {
 		n int
 	}
@@ -12,15 +12,13 @@ func Test_totalNQueens(t *testing.T) {
 		want int
 	}{
 		// TODO: Add test cases.
-		{"", args{1}, 1},
-		{"", args{4}, 2},
-		{"", args{8}, 7},
-		{"", args{6}, 7},
+		{"", args{5}, 4},
+		{"", args{2}, 1},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := totalNQueens(tt.args.n); got != tt.want {
-				t.Errorf("totalNQueens() = %v, want %v", got, tt.want)
+			if got := firstBadVersion(tt.args.n); got != tt.want {
+				t.Errorf("firstBadVersion() = %v, want %v", got, tt.want)
 			}
 		})
 	}

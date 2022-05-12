@@ -26,10 +26,10 @@ func TestCoinChange(t *testing.T) {
 	ret = CoinChange(coins, amount)
 	fmt.Println(ret)
 	return
-	for i := 0; i < 8; i++ {
-		ret = CoinChange(coins, i)
-		fmt.Println(ret)
-	}
+	// for i := 0; i < 8; i++ {
+	// 	ret = CoinChange(coins, i)
+	// 	fmt.Println(ret)
+	// }
 
 }
 

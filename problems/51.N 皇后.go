@@ -75,12 +75,13 @@ var solveNQueensAnswers []map[int]int
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func solveNQueens(n int) [][]string {
-	Queens(1, n)
+	placeQueen(1, n)
 	var ret [][]string
 	for _, m2 := range solveNQueensAnswers {
-		var fangan []string
-		for _, y := range m2 {
+		var board []string
+		for i := 1; i <= n; i++ {
 			var str string
+			y := m2[i]
 			for i := 1; i <= n; i++ {
 				if i == y {
 					str += "Q"
@@ -88,17 +89,17 @@ func solveNQueens(n int) [][]string {
 					str += "."
 				}
 			}
-			fmt.Println(str)
-			fangan = append(fangan, str)
+			//fmt.Println(str)
+			board = append(board, str)
 		}
-		fmt.Println()
-		ret = append(ret, fangan)
+		//fmt.Println()
+		ret = append(ret, board)
 	}
 	return ret
 }
 
 // 摆放第k行的皇后
-func Queens(k int, n int) {
+func placeQueen(k int, n int) {
 	if k > n {
 		if len(solveNQueensMap) == n {
 			solveNQueensAnswers = append(solveNQueensAnswers, solveNQueensMap)
@@ -122,7 +123,7 @@ func Queens(k int, n int) {
 		}
 		if j == k {
 			solveNQueensMap[k] = i
-			Queens(k+1, n)
+			placeQueen(k+1, n)
 		}
 	}
 }

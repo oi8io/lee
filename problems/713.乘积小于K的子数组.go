@@ -63,7 +63,7 @@ func numSubarrayProductLessThanK(nums []int, k int) int {
 			var arr []int
 			if start >= end {
 				break
-				arr = append(append([]int{}, nums[start:]...), nums[:end]...)
+				// arr = append(append([]int{}, nums[start:]...), nums[:end]...)
 			} else {
 				arr = nums[start:end]
 			}
