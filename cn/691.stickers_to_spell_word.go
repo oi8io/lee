@@ -41,43 +41,211 @@
 
 package cn
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func minStickers(stickers []string, target string) int {
+	//每次尝试一种纸，直到完成，另外就是target中有字符不在stickers中
+	//
 
-	var cMap = make(map[int32]int)
-	for _, c := range target {
-		cMap[c]++
+	//noChangeMap := make(map[string]bool)
+	//cntMap := make(map[string]int)
+	//min := tryMinStickers(stickers, target, noChangeMap, cntMap)
+	min := minStickers3(stickers, target)
+	if min == math.MaxInt {
+		return -1
 	}
-	var countMap = make(map[int32][]int)
-	var wordCount = make([]map[int32]int, len(stickers))
-	for i, sticker := range stickers {
-		wordCount[i] = make(map[int32]int)
-		for _, c := range sticker {
-			if _, ok := cMap[c]; !ok { //不需要的字符忽略掉
-				continue
+	return min
+}
+
+// 动态规划
+func minStickers3(stickers []string, target string) int {
+	//1. 先整理成二维数组
+	var stickersArr = make([][]int, len(stickers), len(stickers))
+	for i := 0; i < len(stickers); i++ {
+		stickersArr[i] = stringToCharArr(stickers[i])
+	}
+	var exists = make(map[string]int)
+	//先排序
+	target = charArrToString(stringToCharArr(target))
+	stickers3 := tryMinStickers3(stickersArr, target, exists)
+	return stickers3
+}
+
+func stringToCharArr(s string) []int {
+	var a = make([]int, 26, 26)
+	for i := 0; i < len(s); i++ {
+		a[s[i]-'a']++
+	}
+	return a
+}
+func charArrToString(a []int) string {
+	var sa []byte
+	for i := 0; i < len(a); i++ {
+		for j := 0; j < a[i]; j++ {
+			sa = append(sa, byte(i+'a'))
+		}
+	}
+	return string(sa)
+}
+
+// 通过同位比较，大就直接减到0，小就减去对应位置的数字
+func minusArr(s []int, p []int) string {
+	var ret = make([]int, 26, 26)
+	copy(ret, s)
+	for i := 0; i < len(p); i++ {
+		if s[i] > 0 {
+			if s[i] > p[i] {
+				ret[i] = s[i] - p[i]
+			} else {
+				ret[i] = 0
 			}
+		}
+	}
+	return charArrToString(ret)
+}
+
+func tryMinStickers3(stickers [][]int, target string, exist map[string]int) int {
+	if len(target) == 0 {
+		return 0
+	}
+	if v, ok := exist[target]; ok {
+		return v
+	}
+	var targetArr = stringToCharArr(target)
+	min := math.MaxInt
+	for i := 0; i < len(stickers); i++ {
+		// 首字母匹配的里面去挑选
+		if stickers[i][target[0]-'a'] > 0 {
+			t := minusArr(targetArr, stickers[i])
+			ret := tryMinStickers3(stickers, t, exist)
+			if ret != math.MaxInt && ret+1 < min {
+				min = ret + 1
+			}
+		}
+	}
+	exist[target] = min
+	return min
+}
+
+// 回溯，暴力递归
+func minStickers2(stickers []string, target string) int {
+	//每次尝试一种纸，直到完成，另外就是target中有字符不在stickers中
+	//
+
+	noChangeMap := make(map[string]bool)
+	cntMap := make(map[string]int)
+
+	min := tryMinStickers(stickers, target, noChangeMap, cntMap)
+	if min == math.MaxInt {
+		return -1
+	}
+	return min
+}
+
+// 回溯，暴力递归
+func tryMinStickers(stickers []string, target string, noChangeMap map[string]bool, cntMap map[string]int) int {
+	if len(target) == 0 {
+		return 0
+	}
+	fmt.Println(target)
+	if v, ok := cntMap[target]; ok {
+		return v
+	}
+
+	//fmt.Println(targetMap)
+	//每次尝试一种纸，直到完成，另外就是target中有字符不在stickers中
+	min := math.MaxInt
+	for i := 0; i < len(stickers); i++ {
+		key := target + "++" + stickers[i]
+		if _, ok := noChangeMap[key]; ok {
+			continue
+		}
+		m, changed := minus(stickers[i], target)
+		if changed {
+			i2 := tryMinStickers(stickers, m, noChangeMap, cntMap)
+			if i2 != math.MaxInt && i2+1 < min {
+				min = i2 + 1
+			}
+		} else {
+			noChangeMap[key] = true
+		}
+	}
+	cntMap[target] = min
+	return min
+}
+
+func minus(sticker string, target string) (string, bool) {
+	var targetMap = make(map[byte]int)
+	for i, _ := range target {
+		c := target[i]
+		targetMap[c]++
+	}
+	var changed bool
+	for n := 0; n < len(sticker); n++ {
+		c := sticker[n]
+		if _, ok := targetMap[c]; ok {
+			changed = true
+			targetMap[c]--
+			if targetMap[c] <= 0 {
+				delete(targetMap, c)
+			}
+		}
+	}
+	if !changed {
+		return target, changed
+	}
+	var ret []byte
+	for i := 0; i < len(target); i++ {
+		c := target[i]
+		if i2, ok := targetMap[c]; ok && i2 > 0 {
+			ret = append(ret, c)
+			targetMap[c]--
+		}
+	}
+	return string(ret), changed
+
+}
+
+func minStickers1(stickers []string, target string) int {
+
+	var targetMap = make(map[byte]int)
+	for i, _ := range target {
+		c := target[i]
+		targetMap[c]++
+	}
+	var countMap = make(map[byte][]int)
+	var wordCount = make([]map[byte]int, len(stickers))
+	for i, sticker := range stickers {
+		wordCount[i] = make(map[byte]int)
+		for n, _ := range sticker {
+			c := sticker[n]
+			/*			if _, ok := targetMap[c]; !ok { //不需要的字符忽略掉
+						continue
+					}*/
 			if _, ok := countMap[c]; !ok {
 				countMap[c] = make([]int, len(stickers))
 			}
 			countMap[c][i]++
 		}
 	}
-	var reslovers = make(map[int32]map[int]int)
-	for c, cnt := range cMap {
+	var reslovers = make(map[byte]map[int]int)
+	for c, cnt := range targetMap {
 		if _, ok := countMap[c]; !ok {
 			return -1
 		}
 		reslovers[c] = matchSticker(cnt, countMap[c])
 	}
-	var min = len(cMap)
-	for c, _ := range cMap {
+	var min = len(targetMap)
+	for c, _ := range targetMap {
 		if c != 97 {
 			continue
 		}
 		for i, _ := range reslovers[c] {
-			nMap := copyMap(cMap)
+			nMap := copyMap(targetMap)
 			n := trySticker(c, i, nMap, 0, countMap, wordCount, reslovers)
 			//fmt.Printf(c, i, n)
 			if n < min {
@@ -88,7 +256,7 @@ func minStickers(stickers []string, target string) int {
 	return min
 }
 
-func trySticker(c int32, i int, cMap map[int32]int, words int, countMap map[int32][]int, wordCount []map[int32]int, reslovers map[int32]map[int]int) int {
+func trySticker(c byte, i int, cMap map[byte]int, words int, countMap map[byte][]int, wordCount []map[byte]int, reslovers map[byte]map[int]int) int {
 	if len(cMap) == 0 {
 		return words
 	}
@@ -120,15 +288,22 @@ func trySticker(c int32, i int, cMap map[int32]int, words int, countMap map[int3
 	return min
 }
 
-func copyMap(cMap map[int32]int) map[int32]int {
-	var newMap = make(map[int32]int)
+func copyMap(cMap map[byte]int) map[byte]int {
+	var newMap = make(map[byte]int)
+	for ch, num := range cMap {
+		newMap[ch] = num
+	}
+	return newMap
+}
+func copyMap1(cMap map[byte]int) map[byte]int {
+	var newMap = make(map[byte]int)
 	for ch, num := range cMap {
 		newMap[ch] = num
 	}
 	return newMap
 }
 
-func DealMap(cMap, wordCount map[int32]int, n int) map[int32]int {
+func DealMap(cMap, wordCount map[byte]int, n int) map[byte]int {
 	for ch, num := range wordCount {
 		if cMap[ch] > num*n {
 			cMap[ch] = cMap[ch] - num*n

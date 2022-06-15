@@ -41,9 +41,8 @@ package cn
 
 import "math"
 
-
 //leetcode submit region begin(Prohibit modification and deletion)
-func minFallingPathSum(matrix [][]int) int {
+func minFallingPathSum1(matrix [][]int) int {
 	// 改题与120非常类似
 	/**
 	1. 确定状态，最后一行求MIN
@@ -92,6 +91,5 @@ func triMin(a, b, c int) int {
 	}
 	return b
 }
-
 
 //leetcode submit region end(Prohibit modification and deletion)
