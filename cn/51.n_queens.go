@@ -40,188 +40,159 @@ import "fmt"
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func solveNQueens(n int) [][]string {
-	board := make([]int, n)
-	answers := make([][]int, 0)
-	placeQueen(1, n, board, &answers)
-	queen := printQueen(n, answers)
-	return queen
+	return solveNQueen2(n)
 }
 
-func placeQueen(x int, n int, board []int, answers *[][]int) bool {
-	if x > n {
-		// 所有都摆放成功
-		*answers = append(*answers, board)
-		board = make([]int, n)
-		return true
-	}
-	//fmt.Printf(answers)
-	var failure int
-	for y := 1; y <= n; y++ {
-		if checkQueen(x, y, n, board) {
-			fmt.Println(x-1, "before", board[x-1], y)
-			board[x-1] = y
-			sucess := placeQueen(x+1, n, board, answers)
-			if sucess {
-				fmt.Println(board)
-
+func printQueenBin(b []uint64, n int) {
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			k := i*n + j
+			v := b[k/64] & getB(k)
+			if v > 0 {
+				fmt.Print(" o ")
 			} else {
-				failure++
+				fmt.Print(" . ")
 			}
-		} else {
-			failure++
 		}
+		fmt.Println()
 	}
-	//fmt.Printf(x, failure)
-	//fmt.Printf("这是为什么啊啊啊啊啊啊")
-	if failure == 4 {
-		board = make([]int, 0)
-		return false
-	}
-	return false
+	fmt.Println()
 }
 
-func checkQueen(x, y, n int, board []int) bool {
-	abs := func(a, b int) int {
-		if a > b {
-			return a - b
+func QueenBinToString(boards [][]uint64, n int) [][]string {
+	var answers [][]string
+	for m := 0; m < len(boards); m++ {
+		var answer = make([]string, n)
+		b := boards[m]
+		for i := 0; i < n; i++ {
+			s := make([]byte, n)
+			for j := 0; j < n; j++ {
+				k := i*n + j
+				v := b[k/64] & getB(k)
+				s[j] = '.'
+				if v > 0 {
+					s[j] = 'Q'
+				}
+			}
+			answer[i] = string(s)
 		}
-		return b - a
+		answers = append(answers, answer)
 	}
-	for r := 0; r < x; r++ { //遍历已经所有列
-		y1 := board[r]
-		if y1 == 0 {
-			continue
+	return answers
+}
+
+func solveNQueen1(n int) [][]string {
+	numbers := n*n/64 + 1
+	board := make([]uint64, numbers)
+	answers := make([][]uint64, 0)
+	placeQueen1(n, 0, board, &answers)
+	return QueenBinToString(answers, n)
+}
+func solveNQueen2(n int) [][]string {
+	numbers := n*n/64 + 1
+	board := make([]uint64, numbers)
+	answers := make([][]uint64, 0)
+	m := makeQueenMap(n)
+	placeQueen3(n, 0, board, &answers, m)
+	return QueenBinToString(answers, n)
+}
+
+func placeQueen3(n, x int, board []uint64, answers *[][]uint64, m map[int][]uint64) {
+	if x >= n {
+		*answers = append(*answers, board)
+		return
+	}
+	for y := 0; y < n; y++ {
+		k := x*n + y
+		isOK := checkBoard2(board, m[k])
+		if isOK {
+			nb := copyBoard(board, n)
+			nb[k/64] = nb[k/64] | getB(k)
+			placeQueen1(n, x+1, nb, answers)
 		}
-		if y == y1 { // 同一列
-			fmt.Printf("+:<%d,%d><%d,%d>\n", x+1, y, r+1, y1)
-			return false
-		}
-		if abs(x+1, r+1) == abs(y1, y) { //对角线
-			fmt.Printf("x:<%d,%d><%d,%d>\n", x+1, y, r+1, y1)
+	}
+}
+
+func checkBoard2(b, c []uint64) bool {
+	for i := 0; i < len(b); i++ {
+		if b[i]&c[i] > 0 {
 			return false
 		}
 	}
 	return true
 }
 
-func printQueen(n int, answers [][]int) [][]string {
-	var ret [][]string
-	for _, answer := range answers {
-		var board []string
-		for x := 0; x < n; x++ {
-			var str string
-			v := answer[x]
-			fmt.Println()
-			for y := 1; y <= n; y++ {
-				char := "."
-				if y == v {
-					char = "Q"
+func makeQueenMap(n int) map[int][]uint64 {
+	fix := func(x, y int) []uint64 {
+		var board = make([]uint64, n*n/64+1)
+		for i := 0; i < n; i++ {
+			for j := 0; j < n; j++ {
+				k := i*n + j
+				if i == x || j == y || absQueen(x, i) == absQueen(y, j) {
+					board[k/64] = board[k/64] | getB(k)
 				}
-				fmt.Printf(" %s ", char)
-				str += char
 			}
-			fmt.Println()
-			board = append(board, str)
 		}
-		ret = append(ret, board)
+		return board
 	}
-	return ret
+	var x = make(map[int][]uint64)
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			x[i*n+j] = fix(i, j)
+		}
+	}
+	return x
+}
+
+func placeQueen1(n, x int, board []uint64, answers *[][]uint64) {
+	if x >= n {
+		//printQueenBin(board, n)
+		*answers = append(*answers, board)
+		return
+	}
+	for y := 0; y < n; y++ {
+		//	纵坐标
+		isOk := checkBoard(board, n, x, y)
+		//fmt.Println(n, x, y, isOk)
+		if isOk {
+			nb := copyBoard(board, n)
+			k := x*n + y
+			nb[k/64] = nb[k/64] | getB(k)
+			placeQueen1(n, x+1, nb, answers)
+		}
+	}
+}
+
+func copyBoard(board []uint64, n int) []uint64 {
+	nb := make([]uint64, n*n/64+1, n*n/64+1)
+	copy(nb, board)
+	return nb
+}
+func absQueen(a, b int) int {
+	if a > b {
+		return a - b
+	}
+	return b - a
+}
+
+func getB(k int) uint64 {
+	return 1 << (k % 64)
+}
+
+func checkBoard(board []uint64, n, x, y int) bool {
+	for i := 0; i < x; i++ {
+		for j := 0; j < n; j++ {
+			//	纵坐标 || 斜斜角
+			if j == y || absQueen(x, i) == absQueen(j, y) { // 同列
+				k := i*n + j
+				//fmt.Println(i, j, k)
+				if board[k/64]&getB(k) > 0 {
+					return false
+				}
+			}
+		}
+	}
+	return true
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
-
-/*
-var sm *board
-
-type board struct {
-	n int
-	m map[int]int
-}
-
-func newBoard(n int, m map[int]int) *board {
-	return &board{n: n, m: m}
-}
-
-func (b *board) String() string {
-	var strs []string
-	for i := 1; i <= len(b.m); i++ {
-		y := b.m[i]
-		var str string
-		for n := 1; n <= b.n; n++ {
-			if n == y {
-				str += " Q "
-			} else {
-				str += " + "
-			}
-		}
-		strs = append(strs, str)
-	}
-	return strings.Join(strs, "\n")
-}
-
-var solveNQueensAnswers []map[int]int
-
-func solveNQueens(n int) [][]string {
-	sm = newBoard(n, make(map[int]int))
-	// 第一次放第一排
-	placeQueen(1, n)
-	var ret [][]string
-	for _, m2 := range solveNQueensAnswers {
-		var board []string
-		for i := 1; i <= n; i++ {
-			var str string
-			y := m2[i]
-			for i := 1; i <= n; i++ {
-				if i == y {
-					str += "Q"
-				} else {
-					str += "."
-				}
-			}
-			board = append(board, str)
-		}
-		ret = append(ret, board)
-	}
-	return ret
-}
-
-// 摆放第k行的皇后
-func placeQueen(col int, n int) {
-	if col > n { // 所有都摆放成功
-		if len(sm.m) == n { //  摆放成功
-			solveNQueensAnswers = append(solveNQueensAnswers, sm.m)
-			sm = newBoard(n, make(map[int]int))
-		}
-		return
-	}
-	for r := 1; r <= n; r++ {
-		if checkQueen(col, r, n) {
-			sm.m[col] = r
-			//fmt.Printf(col, r)
-			//fmt.Printf(sm)
-			//placeQueen(col+1, n)
-		}
-	}
-}
-
-func checkQueen(col, row, n int) bool {
-	abs := func(a, b int) int {
-		if a > b {
-			return a - b
-		}
-		return b - a
-	}
-
-	for j := 1; j <= col; j++ { //遍历已经所有列
-		if r, ok := sm.m[j]; ok {
-			if r == row { // 同一列
-				return false
-			}
-			if abs(r, row) == abs(col, j) { //对角线
-				return false
-			}
-		}
-	}
-	return true
-}
-*/

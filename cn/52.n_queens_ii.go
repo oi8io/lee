@@ -36,7 +36,34 @@ package cn
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func totalNQueens(n int) int {
-	return 0
+	numbers := n*n/64 + 1
+	m := makeQueenMap(n)
+	board := make([]uint64, numbers)
+	//printQueenBin(m[0], n)
+	return placeTotalNQueens(n, 0, board, m)
+}
+
+func placeTotalNQueens(n, x int, board []uint64, m map[int][]uint64) int {
+	if x >= n {
+		//printQueenBin(board, n)
+		return 1
+	}
+	var cnt = 0
+	for y := 0; y < n; y++ {
+		//	纵坐标
+		k := x*n + y
+		isOK := checkBoard2(board, m[k])
+		//isOk := checkBoard(board, n, x, y)
+		//fmt.Println(n, x, y, isOk)
+		if isOK {
+			nb := copyBoard(board, n)
+			nb[k/64] = nb[k/64] | getB(k)
+			cnt += placeTotalNQueens(n, x+1, nb, m)
+		}
+		//	横坐标
+		//	斜坐标
+	}
+	return cnt
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
