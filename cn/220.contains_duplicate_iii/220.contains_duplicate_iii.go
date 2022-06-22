@@ -123,4 +123,10 @@ func FindBSTMin220(root *TreeNode) *TreeNode {
 	return root
 }
 
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
 //leetcode submit region end(Prohibit modification and deletion)
