@@ -49,13 +49,16 @@ import (
 )
 
 //leetcode submit region begin(Prohibit modification and deletion)
+//babgbag
+//b0 a1 , g, g
+//b0 a
+//第一个b,第一个a，第一个g start 位置，
 func numDistinct(s string, t string) int {
 	if len(s) == 0 || len(t) == 0 {
 		return 0
 	}
 	n, m := len(s), len(t)
-	end := strings.LastIndexByte(s, t[m-1])
-	start := strings.IndexByte(s, t[0])
+	start, end := strings.IndexByte(s, t[0]), strings.LastIndexByte(s, t[m-1])
 	if start > end || start == -1 || end == -1 {
 		return 0
 	}
@@ -64,31 +67,24 @@ func numDistinct(s string, t string) int {
 	if n == 0 || m > n {
 		return 0
 	}
-	//babgbag
-	//b0 a1 , g, g
-	//b0 a
-	//第一个b,第一个a，第一个g start 位置，
 	var dp = make([][]int, len(s))
-	dp[len(s)-1] = make([]int, len(t))
-	if s[len(s)-1] == t[len(t)-1] {
-		dp[len(s)-1][len(t)-1] = 1
+	dp[n-1] = make([]int, len(t))
+	if s[n-1] == t[len(t)-1] {
+		dp[n-1][len(t)-1] = 1
 	}
 	for i := n - 2; i >= 0; i-- {
 		dp[i] = make([]int, len(t))
-		if i < len(s)-1 {
-			copy(dp[i], dp[i+1])
-		}
+		copy(dp[i], dp[i+1])
 		for j := m - 1; j >= 0; j-- {
-			if s[i] != t[j] {
-				continue
-			}
-			if j == m-1 {
-				dp[i][j]++
-			} else {
-				if dp[i+1][j+1] == 0 { // 后面的字符还未出现过
-					dp[i][j] = 0
+			if s[i] == t[j] {
+				if j != m-1 {
+					if dp[i+1][j+1] == 0 { // 后面的字符还未出现过
+						dp[i][j] = 0
+					} else {
+						dp[i][j] = dp[i+1][j+1] + dp[i+1][j]
+					}
 				} else {
-					dp[i][j] = dp[i+1][j+1] + dp[i+1][j]
+					dp[i][j]++
 				}
 			}
 		}
@@ -111,7 +107,7 @@ func numDistinct1(s string, t string) int {
 	}
 	for i := 1; i < n; i++ {
 		cntMap[i] = make([]int, len(t))
-		if i < len(s)-1 {
+		if i < n-1 {
 			copy(cntMap[i], cntMap[i-1])
 		}
 		arr, ok := exist[s[i]]
