@@ -49,18 +49,52 @@ package cn
  * }
  */
 func postorderTraversal(root *TreeNode) []int {
-	var values = make([]int, 0)
-	postorderTraversal1(root, &values)
-	return values
+	return postorderTraversal2(root)
+	return postorderTraversal1(root)
 }
 
-func postorderTraversal1(root *TreeNode, values *[]int) {
-	if root == nil {
-		return
+// stack
+// 左右头
+// 1. 弹出就打印，追加到answer的后面
+// 2. 如果有左压入左
+// 3. 如果有右压入右
+func postorderTraversal2(root *TreeNode) []int {
+	var s1 = make([]*TreeNode, 0)
+	var s2 = make([]*TreeNode, 0)
+	var answer = make([]int, 0)
+	head := root
+	if head != nil {
+		s1 = append(s1, head)
 	}
-	postorderTraversal1(root.Left, values)
-	postorderTraversal1(root.Right, values)
-	*values = append(*values, root.Val)
+	for len(s1) > 0 {
+		n := len(s1) - 1
+		head = s1[n]
+		s1 = s1[:n]
+		s2 = append(s2, head)
+		if head.Left != nil {
+			s1 = append(s1, head.Left)
+		}
+		if head.Right != nil {
+			s1 = append(s1, head.Right)
+		}
+	}
+	for i := len(s2) - 1; i >= 0; i-- {
+		answer = append(answer, s2[i].Val)
+	}
+	return answer
+}
+
+func postorderTraversal1(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	answer := make([]int, 0)
+	l := postorderTraversal1(root.Left)
+	answer = append(answer, l...)
+	r := postorderTraversal1(root.Right)
+	answer = append(answer, r...)
+	answer = append(answer, root.Val)
+	return answer
 }
 
 //leetcode submit region end(Prohibit modification and deletion)

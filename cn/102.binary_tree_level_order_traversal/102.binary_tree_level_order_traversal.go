@@ -44,7 +44,51 @@ package cn
  *     Right *TreeNode
  * }
  */
+//type TreeNode struct {
+//	Val   int
+//	Left  *TreeNode
+//	Right *TreeNode
+//}
+
 func levelOrder(root *TreeNode) [][]int {
+	return levelOrder2(root)
+	return levelOrder1(root)
+}
+func levelOrder2(root *TreeNode) [][]int {
+	var queue = make([]*TreeNode, 0)
+	var answer = make([][]int, 1)
+	var levelMap = make(map[*TreeNode]int)
+	head := root
+	if head != nil {
+		queue = append(queue, head)
+		levelMap[head] = 0
+	} else {
+		return nil
+	}
+	for {
+		if len(queue) == 0 {
+			break
+		}
+		head = queue[0]
+		queue = queue[1:]
+		lv := levelMap[head]
+		if len(answer) <= lv {
+			answer = append(answer, []int{head.Val})
+		} else {
+			answer[lv] = append(answer[lv], head.Val)
+		}
+		if head.Left != nil {
+			queue = append(queue, head.Left)
+			levelMap[head.Left] = lv + 1
+		}
+		if head.Right != nil {
+			levelMap[head.Right] = lv + 1
+			queue = append(queue, head.Right)
+		}
+	}
+	return answer
+}
+func levelOrder1(root *TreeNode) [][]int {
 	if root == nil {
 		return nil
 	}

@@ -95,6 +95,7 @@ func BuildTreeWithString1(nodes string) *TreeNode {
 }
 func BuildTreeWithString(nodes string) *TreeNode {
 	arr := strings.Split(nodes, ",")
+	fmt.Println(arr)
 	var ar = make([]int, 0)
 	var brk bool
 	var x, i = 1, 0
@@ -106,6 +107,7 @@ func BuildTreeWithString(nodes string) *TreeNode {
 			brk = true
 			break
 		}
+		fmt.Println(i)
 		for j := x; j < x+x; j++ {
 			if checkParentIsNull(ar, j) {
 				ar = append(ar, 0)

@@ -62,18 +62,61 @@ package cn
  *     Right *TreeNode
  * }
  */
-func preorderTraversal(root *TreeNode) []int {
-	var values = make([]int, 0)
-	preorderTraversal1(root, &values)
-	return values
+
+// 递归
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
 }
-func preorderTraversal1(root *TreeNode, values *[]int) {
-	if root == nil {
-		return
+
+func preorderTraversal(root *TreeNode) []int {
+	return preorderTraversal2(root)
+	return preorderTraversal1(root)
+}
+
+/**
+头 右  左
+*/
+func preorderTraversal2(root *TreeNode) []int {
+	var stack, answer = make([]*TreeNode, 0), make([]int, 0)
+	head := root
+	if head != nil {
+		stack = append(stack, head)
 	}
-	*values = append(*values, root.Val)
-	preorderTraversal1(root.Left, values)
-	preorderTraversal1(root.Right, values)
+	for {
+		if len(stack) == 0 {
+			break
+		}
+		if len(stack) > 0 {
+			n := len(stack) - 1
+			head = stack[n] //pop
+			stack = stack[:n]
+			answer = append(answer, head.Val)
+			if head.Right != nil {
+				stack = append(stack, head.Right)
+			}
+			if head.Left != nil {
+				stack = append(stack, head.Left)
+			}
+		}
+	}
+	return answer
+}
+
+//递归
+func preorderTraversal1(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	var answer = make([]int, 0)
+	answer = append(answer, root.Val)
+	l := preorderTraversal1(root.Left)
+	answer = append(answer, l...)
+	r := preorderTraversal1(root.Right)
+	answer = append(answer, r...)
+	return answer
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
