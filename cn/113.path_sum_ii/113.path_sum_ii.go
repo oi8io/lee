@@ -42,6 +42,10 @@
 
 package cn
 
+import (
+	//. "github.com/oi8io/lee/cn/449.serialize_and_deserialize_bst"
+)
+
 //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for a binary tree node.
@@ -51,8 +55,45 @@ package cn
  *     Right *TreeNode
  * }
  */
+
+//type TreeNode struct {
+//	Val   int
+//	Left  *TreeNode
+//	Right *TreeNode
+//}
+
 func pathSum(root *TreeNode, targetSum int) [][]int {
-	return nil
+	if root == nil {
+		return nil
+	}
+	answer := pathSum1(root, targetSum, make([]int, 0))
+	return answer
+}
+func pathSum1(root *TreeNode, targetSum int, path []int) [][]int {
+	if root == nil {
+		return nil
+	}
+	nt := targetSum - root.Val
+	path = append(path, root.Val)
+	if root.Left == nil && root.Right == nil {
+		if nt == 0 {
+			return [][]int{path}
+		} else {
+			return nil
+		}
+	}
+	var answer = make([][]int, 0)
+	left := pathSum1(root.Left, nt, copyPath(path))
+	answer = append(answer, left...)
+	right := pathSum1(root.Right, nt, copyPath(path))
+	answer = append(answer, right...)
+	return answer
+}
+
+func copyPath(p []int) []int {
+	np := make([]int, len(p))
+	copy(np, p)
+	return np
 }
 
 //leetcode submit region end(Prohibit modification and deletion)

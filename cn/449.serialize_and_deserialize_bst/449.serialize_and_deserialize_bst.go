@@ -227,6 +227,11 @@ func (this *Codec) deserializeLevel() *TreeNode {
 	return root
 }
 
+func GetTreeByString(str string) *TreeNode {
+	c := Constructor()
+	return c.deserialize(str)
+}
+
 /**
  * Your Codec object will be instantiated and called as such:
  * ser := Constructor()

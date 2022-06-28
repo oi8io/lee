@@ -40,8 +40,54 @@ package cn
  *     Right *TreeNode
  * }
  */
+
+//type TreeNode struct {
+//	Val   int
+//	Left  *TreeNode
+//	Right *TreeNode
+//}
+
 func generateTrees(n int) []*TreeNode {
-	return nil
+	answers := tryGenerateTrees(1, n)
+	return answers
+}
+
+func tryGenerateTrees(start, end int) []*TreeNode {
+	if start > end {
+		return nil
+	}
+	if start == end {
+		return []*TreeNode{{Val: start}}
+	}
+	var answer = make([]*TreeNode, 0)
+	for i := start; i <= end; i++ {
+		lefts := tryGenerateTrees(start, i-1)
+		rights := tryGenerateTrees(i+1, end)
+		if lefts == nil {
+			for y := 0; y < len(rights); y++ {
+				root := &TreeNode{Val: i}
+				root.Right = rights[y]
+				answer = append(answer, root)
+			}
+		} else if rights == nil {
+			for x := 0; x < len(lefts); x++ {
+				root := &TreeNode{Val: i}
+				root.Left = lefts[x]
+				answer = append(answer, root)
+			}
+		} else {
+			for x := 0; x < len(lefts); x++ {
+				for y := 0; y < len(rights); y++ {
+					root := &TreeNode{Val: i}
+					root.Left = lefts[x]
+					root.Right = rights[y]
+					answer = append(answer, root)
+				}
+			}
+		}
+
+	}
+	return answer
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
