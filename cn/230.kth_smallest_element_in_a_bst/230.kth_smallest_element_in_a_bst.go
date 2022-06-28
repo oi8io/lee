@@ -35,6 +35,10 @@
 
 package cn
 
+import (
+	. "github.com/oi8io/lee/cn/common"
+)
+
 //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for a binary tree node.
@@ -45,7 +49,23 @@ package cn
  * }
  */
 func kthSmallest(root *TreeNode, k int) int {
-	return 0
+	smallest1, _ := kthSmallest1(root, 0, k)
+	return smallest1
+}
+func kthSmallest1(root *TreeNode, cnt, k int) (int, int) {
+	if root == nil {
+		return 0, cnt
+	}
+	smallestL, iL := kthSmallest1(root.Left, cnt, k)
+	if iL == k {
+		return smallestL, iL
+	}
+	iL++
+	if iL == k {
+		return root.Val, iL
+	}
+	smallestR, iR := kthSmallest1(root.Right, iL, k)
+	return smallestR, iR
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
