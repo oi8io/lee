@@ -1,7 +1,7 @@
 package cn
 
 import "testing"
-import . "github.com/oi8io/lee/cn/449.serialize_and_deserialize_bst"
+import . "github.com/oi8io/lee/cn/common"
 
 func Test_recoverTree(t *testing.T) {
 	type args struct {

@@ -35,7 +35,7 @@ package cn
 
 import (
 	"fmt"
-	. "github.com/oi8io/lee/cn/449.serialize_and_deserialize_bst"
+	. "github.com/oi8io/lee/cn/common"
 )
 
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -89,6 +89,7 @@ func recoverTree(root *TreeNode) {
 	}
 	x.Val, y.Val = y.Val, x.Val
 }
+
 //递归中序遍历
 func recoverTree2(root *TreeNode) {
 	nodes := inOrder(root)

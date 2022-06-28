@@ -50,6 +50,8 @@
 
 package cn
 
+import . "github.com/oi8io/lee/cn/common"
+
 //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for a binary tree node.
@@ -69,7 +71,7 @@ func sumNumbers1(root *TreeNode, sum int) int {
 	}
 
 	sum = sum*10 + root.Val
-	if root.Left==nil && root.Right==nil {
+	if root.Left == nil && root.Right == nil {
 		return sum
 	}
 	ls := sumNumbers1(root.Left, sum)

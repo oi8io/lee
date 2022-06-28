@@ -31,6 +31,8 @@
 
 package cn
 
+import . "github.com/oi8io/lee/cn/common"
+
 //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for a binary tree node.
