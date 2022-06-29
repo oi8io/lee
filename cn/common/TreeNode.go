@@ -69,7 +69,7 @@ type Codec struct {
 	order OrderType
 }
 
-func Constructor() Codec {
+func NewTreeCodec() Codec {
 	return Codec{data: make([]string, 0), order: levelOrder}
 }
 
@@ -230,14 +230,14 @@ func (this *Codec) deserializeLevel() *TreeNode {
 }
 
 func GetTreeByString(str string) *TreeNode {
-	c := Constructor()
+	c := NewTreeCodec()
 	return c.deserialize(str)
 }
 
 /**
  * Your Codec object will be instantiated and called as such:
- * ser := Constructor()
- * deser := Constructor()
+ * ser := NewTreeCodec()
+ * deser := NewTreeCodec()
  * tree := ser.serialize(root)
  * ans := deser.deserialize(tree)
  * return ans
