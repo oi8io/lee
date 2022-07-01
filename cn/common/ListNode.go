@@ -18,6 +18,14 @@ func BuildListNode(in []int) *ListNode {
 	return list
 }
 
+func (head *ListNode) GetLast() *ListNode {
+	h := head
+	for h.Next != nil {
+		h = h.Next
+	}
+	return h
+}
+
 func (head *ListNode) String() string {
 	var ret string
 	var x *ListNode
