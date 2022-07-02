@@ -3,6 +3,8 @@ package cn
 import (
 	"reflect"
 	"testing"
+	
+	. "github.com/oi8io/lee/cn/common"
 )
 
 func Test_buildTree(t *testing.T) {

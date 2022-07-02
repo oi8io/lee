@@ -16,6 +16,7 @@ func Test_sortList(t *testing.T) {
 		want *ListNode
 	}{
 		{"", args{nil}, nil},
+		{"", args{BuildListNode([]int{1, 6, 3, 7, 4, 4, 1})}, BuildListNode([]int{1, 1, 3, 4, 4, 6, 7})},
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
