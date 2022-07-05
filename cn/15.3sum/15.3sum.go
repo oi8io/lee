@@ -38,9 +38,36 @@
 
 package cn
 
+import (
+	"sort"
+)
+
 //leetcode submit region begin(Prohibit modification and deletion)
-func threeSum(nums []int) [][]int {
-	return nil
+func threeSum(nums []int) (ans [][]int) {
+	if nums == nil || len(nums) < 3 {
+		return nil
+	}
+	n := len(nums)
+	sort.Ints(nums)
+	for i := 0; i < n; i++ {
+		if i > 0 && nums[i] == nums[i-1] {
+			continue
+		}
+		t := 0 - nums[i]
+		for ii, iii := i+1, n-1; ii < n && iii > ii; {
+			v := nums[ii] + nums[iii]
+			if v > t {
+				iii--
+			} else if v < t || (ii > i+1 && nums[ii] == nums[ii-1]) {
+				ii++
+			} else if v == t {
+				ans = append(ans, []int{nums[i], nums[ii], nums[iii]})
+				iii--
+				ii++
+			}
+		}
+	}
+	return ans
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
