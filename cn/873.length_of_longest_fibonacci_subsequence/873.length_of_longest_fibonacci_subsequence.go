@@ -45,11 +45,67 @@
 
 package cn
 
-import "fmt"
-
 //leetcode submit region begin(Prohibit modification and deletion)
 func lenLongestFibSubseq(arr []int) int {
+	return lenLongestFibSubseq3(arr)
+	return lenLongestFibSubseq1(arr)
+}
+func lenLongestFibSubseq3(arr []int) int {
+	n := len(arr)
+	m := make(map[int]int)
+	for i := 0; i < n; i++ {
+		m[arr[i]] = i
+	}
+	var x = 0
+	var dp = make([][]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([]int, n)
+		for j := i - 1; j >= 0 && arr[j]*2 > arr[i]; j-- {
+			v := arr[i] - arr[j]
+			if k, ok := m[v]; ok {
+				dp[i][j] = max(dp[j][k]+1, 3)
+				x = max(x, dp[i][j])
+			}
+		}
+	}
+	return x
+}
+func lenLongestFibSubseq1(arr []int) int {
+	n := len(arr)
+	m := make(map[int]int)
+	for i := 0; i < n; i++ {
+		m[arr[i]] = i
+	}
+	var x = 0
+	for i := 0; i < n; i++ {
+		for j := i + 1; j < n; j++ {
+			ans := try(arr, m, i, j, 0)
+			x = max(ans, x)
+		}
+	}
+	return x
+}
+func try(arr []int, m map[int]int, i, j int, ret int) int {
+	k := arr[j] + arr[i]
+	if v, ok := m[k]; ok {
+		if ret == 0 {
+			ret = 3
+		} else {
+			ret++
+		}
+		return try(arr, m, j, v, ret)
+	} else {
+		return ret
+	}
+}
+func lenLongestFibSubseq2(arr []int) int {
 	// if arr[x]=arr[i] + arr[j] => dp[x]=dp[j]+1
+	// 2,4,5,6,7,8,11,13,14,15,21,22,34
+	// 2 4 6 x
+	// 2 5 7 12 x
+	// 2 6 8 14 15
+	// 4 5
+	// dp[6][4] = dp[4][2]+1
 	n := len(arr)
 	m := make(map[int]int)
 	for i := 0; i < n; i++ {
@@ -66,7 +122,7 @@ func lenLongestFibSubseq(arr []int) int {
 			}
 		}
 	}
-	fmt.Println(dp)
+
 	return dp[n-1]
 }
 func max(a, b int) int {

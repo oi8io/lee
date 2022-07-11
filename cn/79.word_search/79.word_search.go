@@ -65,36 +65,52 @@ func exist(board [][]byte, word string) bool {
 			}
 		}
 	}
-	b := try(board, word, 0, 0, pos)
+	visited := make(map[int]bool)
+	if len(pos[word[0]]) == 0 {
+		return false
+	}
+	b := try(board, word, 0, 0, visited, pos)
 	return b
 }
 
-func try(b [][]byte, w string, i, j int, m map[byte][]int) bool {
-	if i == len(w) {
+func try(b [][]byte, w string, i, j int, v map[int]bool, m map[byte][]int) bool {
+	if i == len(w)-1 {
 		return true
 	}
 	c := w[i]
-	if j >= len(m[c]) {
+	if len(m[c]) == 0 || j >= len(m[c]) {
 		return false
 	}
+	v[m[w[i]][j]] = true
 	x := m[c][j]
 	var ret bool
-	for i2, i3 := range m[w[i+1]] {
-		if isLocal(len(b[0]), x, i3) {
-			ret = try(b, w, i+1, i2, m)
+	for i2, y := range m[w[i+1]] {
+		if !v[y] && isLocal(len(b[0]), x, y) {
+			nv := cpm(v)
+			ret = try(b, w, i+1, i2, nv, m)
 			if ret {
 				return true
 			}
 		}
 	}
-	return try(b, w, i, j+1, m)
+	return try(b, w, i, j+1, v, m)
+}
+
+func cpm(m map[int]bool) map[int]bool {
+	n := make(map[int]bool)
+	for i, b := range m {
+		n[i] = b
+	}
+	return n
 }
 
 func isLocal(n, x, y int) bool {
-	if abs(x, y) == n || abs(x, y) == 1 {
-		return true
+	k := abs(x, y)
+	if x/n == y/n {
+		return k == 1
+	} else {
+		return k == n
 	}
-	return false
 }
 func abs(a, b int) int {
 	if a > b {

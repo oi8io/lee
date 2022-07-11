@@ -33,33 +33,34 @@ package cn
 //leetcode submit region begin(Prohibit modification and deletion)
 func spiralOrder(matrix [][]int) []int {
 	m, n := len(matrix), len(matrix[0])
-	k ,km:= 0,min(m, n)
+	k, km := 0, min(m, n)
 	var ans = make([]int, 0)
-	for k < km /2 {
+	for k < km/2 {
 		i, j := k, k
-		for ; j < n-k-1; j++ { //right
+		for ; j < n-k-1; j++ { // right
 			ans = append(ans, matrix[i][j])
 		}
-		for ; i < m-k-1; i++ { //down
+		for ; i < m-k-1; i++ { // down
 			ans = append(ans, matrix[i][j])
 		}
-		for ; j >= k+1; j-- { //left
+		for ; j >= k+1; j-- { // left
 			ans = append(ans, matrix[i][j])
 		}
-		for ; i >= k+1; i-- { //up
+		for ; i >= k+1; i-- { // up
 			ans = append(ans, matrix[i][j])
 		}
 		k++
 	}
-	if km%2==1 {
-		ans= append(ans,km/2 )
+	if km%2 == 1 { //奇数处理
+		if m < n { // 行
+			ans = append(ans, matrix[km/2][k:n-k]...)
+		} else {
+			for i := km / 2; i < m-km/2; i++ {
+				ans = append(ans, matrix[i][km/2])
+			}
+		}
 	}
 	return ans
-
-}
-
-func loop(matrix [][]int, k, direction int) {
-
 }
 
 func min(a, b int) int {

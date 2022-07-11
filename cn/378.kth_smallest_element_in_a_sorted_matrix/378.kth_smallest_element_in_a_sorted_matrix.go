@@ -47,6 +47,41 @@ package cn
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func kthSmallest(matrix [][]int, k int) int {
+	return kthSmallest2(matrix, k)
+	return kthSmallest1(matrix, k)
+}
+
+//二分查找
+func kthSmallest2(matrix [][]int, k int) int {
+	n := len(matrix)
+	lo, hi := matrix[0][0], matrix[n-1][n-1] // 第一个数和最后一个数 中间
+	for lo < hi {
+		mi := lo + (hi-lo)>>1
+		if getCount(matrix, mi, n) >= k {
+			hi = mi
+		} else {
+			lo = mi + 1
+		}
+	}
+	return lo
+}
+
+// 统计所有小于mi的数字
+func getCount(matrix [][]int, mi, n int) int {
+	i, j := n-1, 0
+	cnt := 0
+	for i >= 0 && j < n {
+		if matrix[i][j] <= mi {
+			cnt += i + 1 // 纵向统计
+			j++
+		} else {
+			i--
+		}
+	}
+	return cnt
+}
+
+func kthSmallest1(matrix [][]int, k int) int {
 	var ans = make([]int, len(matrix[0]))
 	copy(ans, matrix[0])
 	for i := 1; i < len(matrix); i++ {

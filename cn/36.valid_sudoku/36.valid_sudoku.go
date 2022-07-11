@@ -95,4 +95,8 @@ func isValidSudoku(board [][]byte) bool {
 	return true
 }
 
+func checkValidNum(val, row, col, block int) bool {
+	return (row|col|block)&val == 0
+}
+
 //leetcode submit region end(Prohibit modification and deletion)

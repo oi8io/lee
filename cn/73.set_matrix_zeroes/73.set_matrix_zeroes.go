@@ -47,20 +47,21 @@ package cn
 func setZeroes(matrix [][]int) {
 	m, n := len(matrix), len(matrix[0])
 	var x = make([]int, 0)
-	for i := 0; i < m-1; i++ {
-		for j := 0; j < n-1; j++ {
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
 			if matrix[i][j] == 0 {
 				x = append(x, i*n+j)
 			}
 		}
 	}
+
 	for _, i2 := range x {
 		line := i2 / n
-		for i := 0; i < n-1; i++ {
+		for i := 0; i < n; i++ {
 			matrix[line][i] = 0
 		}
 		col := i2 % n
-		for i := 0; i < n-1; i++ {
+		for i := 0; i < m; i++ {
 			matrix[i][col] = 0
 		}
 	}
