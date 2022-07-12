@@ -100,6 +100,8 @@ import (
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
 	return getIntersectionNode1(headA, headB)
 }
+
+// hashmap
 func getIntersectionNode1(headA, headB *ListNode) *ListNode {
 	a1, b1 := headA, headB
 	var exist = make(map[*ListNode]bool)
