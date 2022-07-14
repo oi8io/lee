@@ -55,6 +55,19 @@ import . "github.com/oi8io/lee/cn/common"
  * }
  */
 func countNodes(root *TreeNode) int {
+	return countNodes2(root)
+	return countNodes1(root)
+}
+func countNodes2(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	if root.Left == nil && root.Right == nil {
+		return 1
+	}
+
+}
+func countNodes1(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
