@@ -61,6 +61,15 @@ func isPowerOfTwo(n int) bool {
 	if n == 0 {
 		return false
 	}
+	return isPowerOfTwo2(n)
+}
+func isPowerOfTwo2(n int) bool {
+	return n&(n-1) == 0
+}
+func isPowerOfTwo1(n int) bool {
+	if n == 0 {
+		return false
+	}
 	// 1后面全是0的才是2的N次幂
 	return ((n-1)|n)+1 == 2*n
 }
