@@ -46,7 +46,36 @@ package cn
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func numIslands(grid [][]byte) int {
-	return numIslands2(grid)
+	return numIslands3(grid)
+}
+func numIslands3(grid [][]byte) int {
+	n, m := len(grid), len(grid[0])
+	mp := make(map[int]bool)
+	var bfs func(i, j int)
+	bfs = func(i, j int) {
+		if i < 0 || j < 0 || i >= n || j >= m {
+			return
+		}
+		if mp[i*m+j] || grid[i][j] == '0' {
+			return
+		}
+		mp[i*m+j] = true
+		bfs(i, j-1)
+		bfs(i, j+1)
+		bfs(i-1, j)
+		bfs(i+1, j)
+	}
+	ans := 0
+	for i := 0; i < n; i++ {
+		for j := 0; j < m; j++ {
+			if grid[i][j] == '0' || mp[i*m+j] {
+				continue
+			}
+			bfs(i, j)
+			ans++
+		}
+	}
+	return ans
 }
 func numIslands2(grid [][]byte) int {
 	m, n := len(grid), len(grid[0])
